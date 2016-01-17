@@ -27,7 +27,7 @@ function redraw(){
   radius = Math.min(height) / 2;
   arc.outerRadius(radius - 10).innerRadius(radius - 90);
   d3.select('#graph').select('svg').attr('width', width).attr('height', height);
-  d3.select('#graph').select('.group').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+  d3.select('#graph').selectAll('.group').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
   update();
 }
 
@@ -46,18 +46,23 @@ var pie = d3.layout.pie()
 var svg = d3.select('#graph').append('svg')
     .attr('width', width)
     .attr('height', height)
-  .append('g')
+var chartGroup = svg.append('g')
+    .attr("class", "group")
+    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+var textGroup = svg.append('g')
     .attr("class", "group")
     .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
 
-var centerText = svg.append('text')
+var path = chartGroup.selectAll("path");
+
+var centerNumber = textGroup.append('text')
     .attr("text-anchor", "middle")
-    .attr("class", "percent-complete-txt")
-    // y should be about half of font size set in css
-    .attr("y", "20");
-
-var path = svg.selectAll("path");
-
+    .attr("class", "percent-complete-number")
+    .attr("y", "-6");
+var centerLabel = textGroup.append('text')
+    .attr("text-anchor", "middle")
+    .attr("class", "percent-complete-label")
+    .attr("y", "22")
 
 $(function () {
     setInterval(overpass, 15000);
@@ -95,8 +100,9 @@ function update(){
     { segment: "remaining", value: remaining }
   ]
 
-  var percentageText = d3.round((traced / goal) * 100).toString() + "%";
-  centerText.text(percentageText);
+  // var percentageText = d3.round((traced / goal) * 100).toString() + "%";
+  centerNumber.text(traced);
+  centerLabel.text('of ' + goal + ' buildings goal')
 
   var data0 = path.data(),
       data1 = pie(data);

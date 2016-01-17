@@ -2,8 +2,14 @@
   display: inline-block;
   max-height: 100px;
 }
-.percent-complete-txt {
+.percent-complete-number {
   font-size: 60px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 900;
+  fill: #7f181b;
+}
+.percent-complete-label {
+  font-size: 18px;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 900;
   fill: #7f181b;
