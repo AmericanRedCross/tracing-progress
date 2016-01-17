@@ -89,7 +89,7 @@ function overpass(){
 
 function update(){
   traced = overpassCount - baseline;
-  remaining = goal - traced;
+  remaining = (traced <= goal) ? goal - traced : 0;
   var data = [
     { segment: "progress", value: traced },
     { segment: "remaining", value: remaining }

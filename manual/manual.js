@@ -40,9 +40,9 @@ var path = svg.selectAll("path");
 
 
 function update(){
-  var progress = $('input[name="progress-input"]')[0].value;
-  var goal = $('input[name="goal-input"]')[0].value;
-  var remaining = goal - progress;
+  var progress = parseInt($('input[name="progress-input"]')[0].value);
+  var goal = parseInt($('input[name="goal-input"]')[0].value);
+  var remaining = (progress <= goal) ? goal - progress : 0;
   var data = [
     { segment: "progress", value: progress },
     { segment: "remaining", value: remaining }
