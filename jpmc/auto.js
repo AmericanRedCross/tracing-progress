@@ -69,7 +69,7 @@ var centerLabel = textGroup.append('text')
 
 $(function () {
     // run update every minute
-    setInterval(overpass, 60000);
+    setInterval(overpass, 120000);
 });
 
 var running = false;
