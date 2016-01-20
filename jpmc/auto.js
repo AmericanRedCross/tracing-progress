@@ -104,6 +104,7 @@ function overpass(){
 }
 
 function update(){
+  $('#loading').hide();
   traced = overpassCount - baseline;
   remaining = (traced <= goal) ? goal - traced : 0;
   var data = [
