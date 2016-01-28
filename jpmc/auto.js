@@ -5,7 +5,7 @@ var latMin = 11.458490752653873,
     latMax = 12.506302633324777,
     lngMax = -71.070556640625;
 var goal = 20000;
-var baseline = 21509;
+var baseline = 23678;
 ////////
 var traced = 0;
 var overpassCount = 0;
