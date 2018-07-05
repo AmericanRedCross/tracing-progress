@@ -1,16 +1,19 @@
 // UPDATE THESE VARIABLES
-var latMin = 23.757421,
-    lngMin = 90.424154,
-    latMax = 23.766906,
-    lngMax = 90.440998;
-var goal = 100;
-var baseline = 750;
+// way[building](11.458490752653873, -73.10302734375, 12.506302633324777, -71.070556640625);out meta;>;out meta qt;
+var latMin = 11.458490752653873,
+    lngMin = -73.10302734375,
+    latMax = 12.506302633324777,
+    lngMax = -71.070556640625;
+var goal = 20000;
+var baseline = 23692;
 ////////
 var traced = 0;
 var overpassCount = 0;
 
 var progressColor = '#ed1b2e',
     remainingColor = '#d7d7d8';
+
+var formatCommas = d3.format(",");
 
 d3.select(window).on("resize", throttle);
 var throttleTimer;
@@ -65,34 +68,43 @@ var centerLabel = textGroup.append('text')
     .attr("y", "22")
 
 $(function () {
-    setInterval(overpass, 15000);
+    // run update every minute
+    setInterval(overpass, 120000);
 });
 
+var running = false;
 function overpass(){
-  console.log("checking for new data...");
-  $.ajax({
-      url:
-          'https://www.overpass-api.de/api/interpreter?' +
-          'data=[out:json][timeout:60];' +
-          'way[building](' + latMin + ',' + lngMin + ',' + latMax + ',' + lngMax + ');' +
-          'out;',
-      dataType: 'json',
-      type: 'GET',
-      async: true,
-      crossDomain: true
-  }).done(function(data) {
-      overpassCount = data.elements.length;
-      console.log("current count: " + overpassCount);
-      update();
-  }).fail(function(error) {
-      console.log(error);
-      console.log( "error" );
-  }).always(function() {
-      console.log( "complete" );
-  });
+  if(running === false){
+    running = true;
+    console.log("checking for new data...");
+    $.ajax({
+        url:
+            'https://www.overpass-api.de/api/interpreter?' +
+            'data=[out:json][timeout:600];' +
+            'way[building](' + latMin + ',' + lngMin + ',' + latMax + ',' + lngMax + ');' +
+            'out ids;',
+        dataType: 'json',
+        type: 'GET',
+        async: true,
+        crossDomain: true
+    }).done(function(data) {
+        if(data.elements.length != 0 && data.elements.length > overpassCount){
+          overpassCount = data.elements.length;
+        }
+        console.log("returned current count: " + overpassCount);
+        update();
+    }).fail(function(error) {
+        console.log(error);
+        console.log( "error" );
+    }).always(function() {
+        running = false;
+        console.log("done overpass query")
+    });
+  } else { console.log("It looks like a previous overpass query is still running!"); }
 }
 
 function update(){
+  $('#loading').hide();
   traced = overpassCount - baseline;
   remaining = (traced <= goal) ? goal - traced : 0;
   var data = [
@@ -101,8 +113,8 @@ function update(){
   ]
 
   // var percentageText = d3.round((traced / goal) * 100).toString() + "%";
-  centerNumber.text(traced);
-  centerLabel.text('of ' + goal + ' buildings goal')
+  centerNumber.text(formatCommas(traced));
+  centerLabel.text('of ' + formatCommas(goal) + ' buildings goal')
 
   var data0 = path.data(),
       data1 = pie(data);

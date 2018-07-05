@@ -2,8 +2,14 @@
   display: inline-block;
   max-height: 100px;
 }
-.percent-complete-txt {
+.percent-complete-number {
   font-size: 60px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 900;
+  fill: #7f181b;
+}
+.percent-complete-label {
+  font-size: 18px;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 900;
   fill: #7f181b;
@@ -22,4 +28,15 @@ input:focus {
 }
 .clickable {
   cursor: pointer;
+}
+
+#loading {
+  position: absolute;
+  z-index: 99999;
+  width: 100%;
+  text-align: center;
+}
+#loader{
+  height: 280px;
+  margin-top: 10px;
 }
